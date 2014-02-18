@@ -15,6 +15,13 @@ class File(models.Model):
 
 	filename = models.CharField(max_length=50)
 	file_type = models.CharField(max_length=4, choices=FILE_CHOICES, default=HTML)
+    
 	created_on = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
+    
 	created_by = models.ForeignKey(User)
-	content = models.TextField(max_length=5000)
+    users = models.ManyToManyField(User)
+	content = models.TextField()
+    
+    def __str__(self):
+        return self.filename

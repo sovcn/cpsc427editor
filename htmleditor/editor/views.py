@@ -24,3 +24,8 @@ def files(request):
 def logout_view(request):
 	logout(request)
 	return redirect("/")
+
+@login_required
+def file_view(request, file_id):
+    user = request.user
+    return HttpResponse("File: " + str(file_id))
