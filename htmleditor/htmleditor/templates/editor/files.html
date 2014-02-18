@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+	Hello {{ user_full_name }}. You have {{ num_files }} files.
+	
+	<ul>
+	{% for file in files %}
+		<li>{{ file.filename }}</li>
+	{% endfor %}
+	</ul>
+{% endblock %}
