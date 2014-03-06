@@ -5,14 +5,27 @@
 
 
 // Create Editor Namespace
+var editor = {};
 (function(){
-	var editor = {};
+
+	editor.idPrefix = "editor_";
 
 	function Editor(container, content, options){
 		var self = this;
 
-		// Steps
+		self.container = $("#" + container);
+		self.content = content;
 
+		if( options == null || typeof options != "object"){
+			options = {};
+		}
+		self.options = options;
+
+
+		self.container.text(self.dummyContent);
+		self.editor = ace.edit(container);
+		self.editor.setTheme("ace/theme/monokai");
+		self.editor.getSession().setMode("ace/mode/html");
 	}
 
 	editor.initEditor = function(container, content, options){
@@ -23,7 +36,7 @@
 			console.error("Must load jQuery before loading the editor.");
 			return;
 		}
-	}
+	};
 
 })();
 
@@ -33,5 +46,5 @@ $(document).ready(function(){
 	var dummyContent = "<h1>testing</h1>";
 
 	// Load up the editor
-	var editor = initEditor("#editor", dummyContent, {});
+	var editorObj = editor.initEditor("editor", dummyContent, {});
 });
