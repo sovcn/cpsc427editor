@@ -162,3 +162,31 @@ div.main-container{
 	border-top: 0;
 	overflow: hidden;
 }
+
+div#content_loading{
+	text-align: center;
+	padding-top: 100px;
+}
+
+div#file_column{
+	margin: 0;
+   padding: 0;
+   width: 19%;
+   float: left;
+   background-color: #ededed;
+   border-right: 1px solid #cccccc;
+}
+
+div#content_column{
+	margin: 0;
+   padding: 0;
+   width: 80%;
+   float: right;
+}
+
+div#file_editor{
+	position: aboslute;
+	width: 1000px;
+	height: 1000px;
+}
+

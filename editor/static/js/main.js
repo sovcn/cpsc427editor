@@ -32,6 +32,153 @@ $.ajaxSetup({
 });
 
 
+
+// editor namespace
+var sruide = {};
+(function(){
+
+	// constants
+	var FILE_LIST_ID = "#file_list";
+	var NUM_FILES_ID = "#num_files";
+	
+	var GREETING_ID = "#greeting";
+	var LOADING_ID = "#content_loading";
+	
+	var CONTENT_COLUMN_ID = "#content_column";
+	var FILE_EDITOR_ID = "#file_editor";
+	
+	// namespace globals
+	var editor;
+	
+	
+	function displayErrorMessage(message){
+		$("div#greeting").hide();
+		
+		$("div#error_message").text(message);
+		$("div#error_message").show();
+	}
+	
+	function setLoaded(){
+		$(LOADING_ID).hide();
+		$(GREETING_ID).show();
+	}
+	
+	
+	// Class FileManager
+	function FileManager(){
+		var self = this;
+		
+		self.files = [];
+		
+		self.contentColumn = $(CONTENT_COLUMN_ID);
+		$(window).resize(function(){
+			$(FILE_EDITOR_ID).width(self.contentColumn.width()-5);
+			$(FILE_EDITOR_ID).height($(window).height()-120);
+			editor.resize();
+		});
+	}
+	
+	
+	FileManager.prototype.fetchUserFiles = function(){
+		var self = this;
+		
+		$.post("/ajax/editor/file/user_file_list.json", function(data){
+			if( data.success ){
+				
+				self.files = [];
+				
+				for(var index in data.data){
+					var file = new File(data.data[index]);
+					self.files.push(file);
+				}
+				
+				self.displayFileList();
+			}
+			else{
+				displayErrorMessage("Unable to load user file data.  Please reload the page.");
+			}
+		});
+	};
+	
+	
+	function displayFile(data){
+		$("article#file_content header h1").text(data.file_path);
+		//$("article#file_content div#file_editor").text(data.content);
+		
+		editor.setValue(data.content);
+		//heightUpdateFunction();
+		editor.resize();
+		
+		//editor.goToLine(1);
+	}
+	
+	FileManager.prototype.displayFileList = function(){
+		var self = this;
+		
+		if( self.files != null && self.files != undefined && self.files.length > 0 ){
+			
+			
+			var list = $(FILE_LIST_ID);
+			var num_files = self.files.length;
+			$(NUM_FILES_ID).text(num_files);
+			
+			var fileListDOM = $("#file_list");
+			for(var index in self.files ){
+				var file = self.files[index];
+				var link = $("<a>");
+				link.text(file.filename)
+					.attr("href", "#");
+				
+				link.click((function(){
+					// Click closure
+					var fileClosure = file;
+					return function(){
+						console.log("Clicked file(" + fileClosure.id + ")");
+						displayFile(fileClosure);
+					};
+				})());
+				
+				var listItem = $("<li>");
+				listItem.append(link);
+				
+				fileListDOM.append(listItem);
+			}
+			
+			setLoaded();
+		}
+	};
+	
+	// Class File
+	function File(data){
+		var self = this;
+		
+		self.id = data.id;
+		self.content = data.content;
+		self.created_by = data.created_by;
+		self.file_path = data.file_path;
+		self.file_type = data.file_type;
+		self.filename = data.filename;
+		self.users = data.users;
+		
+	}
+	
+	
+	
+	sruide.init = function(){
+		editor = ace.edit("file_editor");
+		editor.getSession().setMode("ace/mode/html");
+		
+		var fileManager = new FileManager();
+		fileManager.fetchUserFiles();
+		
+		return fileManager;
+	};
+	
+})();
+
+
+var fileManager = sruide.init();
+
 // Begin editor app.
 /*
 var editor;
@@ -55,17 +202,6 @@ var heightUpdateFunction = function() {
 };
 
 //editor.getSession().on('change', heightUpdateFunction);
-
-function displayFile(data){
-	$("article#file_content header h1").text(data.file_path);
-	//$("article#file_content div#file_editor").text(data.content);
-	
-	editor.setValue(data.content);
-	//heightUpdateFunction();
-	editor.resize();
-	
-	editor.goToLine(1);
-}
 
 function fileClick(pk, element){
 	$.post("/ajax/editor/file/" + pk + "/get.json", function(data){
@@ -112,13 +248,6 @@ function displayFileList(data){
 		
 		$("div#greeting").show();
 	}
-}
-
-function displayErrorMessage(message){
-	$("div#greeting").hide();
-	
-	$("div#error_message").text(message);
-	$("div#error_message").show();
 }
 
 $(document).ready(function(){

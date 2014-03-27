@@ -7,6 +7,9 @@
 {% endblock %}
 
 {% block content %}
+
+	<div id="content_loading"><img src="{% static "img/ajax-loader.gif" %}" alt="Loading..." /></div>
+
 	<div id="file_column">
 		<div id="greeting" style="display: none;">
 			<p>Hello {{ user_full_name }}.<br/> You have <span id="num_files"></span> files.</p>
