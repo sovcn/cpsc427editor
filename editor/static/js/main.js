@@ -61,6 +61,7 @@ var sruide = {};
 	function setLoaded(){
 		$(LOADING_ID).hide();
 		$(GREETING_ID).show();
+		$(CONTENT_COLUMN_ID).show();
 	}
 	
 	
@@ -71,6 +72,11 @@ var sruide = {};
 		self.files = [];
 		
 		self.contentColumn = $(CONTENT_COLUMN_ID);
+		self.contentColumn.hide();
+		
+		$(FILE_EDITOR_ID).width(self.contentColumn.width()-5);
+		$(FILE_EDITOR_ID).height($(window).height()-120);
+		
 		$(window).resize(function(){
 			$(FILE_EDITOR_ID).width(self.contentColumn.width()-5);
 			$(FILE_EDITOR_ID).height($(window).height()-120);
