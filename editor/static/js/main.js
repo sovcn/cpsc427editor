@@ -33,7 +33,7 @@ $.ajaxSetup({
 
 
 // Begin editor app.
-
+/*
 var editor;
 editor = ace.edit("file_editor");
 editor.getSession().setMode("ace/mode/html");
@@ -136,4 +136,4 @@ $(document).ready(function(){
 	
 	
 	
-});
+});*/
