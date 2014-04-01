@@ -47,6 +47,10 @@ var sruide = {};
 	var CONTENT_COLUMN_ID = "#content_column";
 	var FILE_EDITOR_ID = "#file_editor";
 	
+	var FILE_COLUMN_ID = "#file_column";
+	
+	var FILE_COLUMN_ARROW_ID = "#file_column_arrow";
+	
 	// namespace globals
 	var editor;
 	
@@ -77,12 +81,27 @@ var sruide = {};
 		$(FILE_EDITOR_ID).width(self.contentColumn.width()-5);
 		$(FILE_EDITOR_ID).height($(window).height()-120);
 		
+		$(FILE_COLUMN_ID).height(self.contentColumn.height());
+		
 		$(window).resize(function(){
+			
+			
 			$(FILE_EDITOR_ID).width(self.contentColumn.width()-5);
 			$(FILE_EDITOR_ID).height($(window).height()-120);
 			editor.resize();
+			
+			$(FILE_COLUMN_ID).height(self.contentColumn.height());
 		});
+		
+		self.registerUiEventHandlers();
+		
 	}
+	
+	FileManager.prototype.registerUiEventHandlers = function(){
+		$(FILE_COLUMN_ARROW_ID).click(function(){
+			$(FILE_COLUMN_ID).slideUp();
+		});
+	};
 	
 	
 	FileManager.prototype.fetchUserFiles = function(){
@@ -121,7 +140,7 @@ var sruide = {};
 	FileManager.prototype.displayFileList = function(){
 		var self = this;
 		
-		if( self.files != null && self.files != undefined && self.files.length > 0 ){
+		if( self.files != null && self.files != undefined ){
 			
 			
 			var list = $(FILE_LIST_ID);

@@ -190,3 +190,33 @@ div#file_editor{
 	height: 1000px;
 }
 
+/*Renee Work*/
+div#arrow_container{ 
+	text-align: right;
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+nav#nav2{
+    float: left;
+    width: auto;
+}
+
+p#file_list{
+    font-size: 18px;
+    font-weight: lighter;
+    color: #666666;
+    font-family: wf_segoe-ui_light, 'Segoe UI Light', 'Segoe WP Light', wf_segoe-ui_normal, 'Segoe UI', Segoe, 'Segoe WP', Tahoma, Verdana, Arial,   sans-serif;
+    border-bottom: 1px solid #cccccc;
+    text-align: left;
+    width:97%;
+    padding-left: 3%;
+}
+
+li#one{
+    color: #cccccc;
+    font-size: 14px;
+    font-family: wf_segoe-ui_light, 'Segoe UI Light', 'Segoe WP Light', wf_segoe-ui_normal, 'Segoe UI', Segoe, 'Segoe WP', Tahoma, Verdana, Arial,   sans-serif;
+    
+}
+
