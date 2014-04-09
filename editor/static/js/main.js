@@ -51,6 +51,8 @@ var sruide = {};
 	
 	var FILE_COLUMN_ARROW_ID = "#file_column_arrow";
 	
+	var SAVE_BUTTON_ID = "#save_file";
+	
 	// namespace globals
 	var editor;
 	
@@ -74,6 +76,7 @@ var sruide = {};
 		var self = this;
 		
 		self.files = [];
+		self.currentFile = null;
 		
 		self.contentColumn = $(CONTENT_COLUMN_ID);
 		self.contentColumn.hide();
@@ -98,8 +101,30 @@ var sruide = {};
 	}
 	
 	FileManager.prototype.registerUiEventHandlers = function(){
+		var self = this;
+		
 		$(FILE_COLUMN_ARROW_ID).click(function(){
 			$(FILE_COLUMN_ID).slideUp();
+		});
+		
+		
+		$(SAVE_BUTTON_ID).click(function(){
+			console.log("Saving: " + self.currentFile.id);
+			
+			self.currentFile.content = editor.getValue();
+			
+			$.post("/ajax/editor/file/" + self.currentFile.id + "/update.json",
+					self.currentFile.toObject(),
+					function(data){
+						if( data.success ){
+							console.log("File saved...");
+							self.currentFile.updateData(data.data);
+							displayFile(self.currentFile);
+						}
+						else{
+							console.error("Unable to save file.");
+						}
+					});
 		});
 	};
 	
@@ -159,6 +184,7 @@ var sruide = {};
 					var fileClosure = file;
 					return function(){
 						console.log("Clicked file(" + fileClosure.id + ")");
+						self.currentFile = fileClosure;
 						displayFile(fileClosure);
 					};
 				})());
@@ -178,16 +204,35 @@ var sruide = {};
 		var self = this;
 		
 		self.id = data.id;
+	
+		self.updateData(data);
+		
+	}
+	
+	File.prototype.updateData = function(data){
+		var self = this;
+		
 		self.content = data.content;
 		self.created_by = data.created_by;
 		self.file_path = data.file_path;
 		self.file_type = data.file_type;
 		self.filename = data.filename;
 		self.users = data.users;
+	};
+	
+	File.prototype.toObject = function(){
+		var self = this;
 		
+		return {
+			id: self.id,
+			pk: self.id,
+			content: self.content,
+			created_by: self.created_by,
+			file_path: self.file,
+			filename: self.filename,
+			users: self.users
+		}
 	}
-	
-	
 	
 	sruide.init = function(){
 		editor = ace.edit("file_editor");
