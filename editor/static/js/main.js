@@ -78,6 +78,8 @@ var sruide = {};
 		self.files = [];
 		self.currentFile = null;
 		
+		$(SAVE_BUTTON_ID).hide();
+		
 		self.contentColumn = $(CONTENT_COLUMN_ID);
 		self.contentColumn.hide();
 		
@@ -85,6 +87,7 @@ var sruide = {};
 		$(FILE_EDITOR_ID).height($(window).height()-120);
 		
 		$(FILE_COLUMN_ID).height(self.contentColumn.height());
+		
 		
 		$(window).resize(function(){
 			
@@ -127,7 +130,20 @@ var sruide = {};
 		
 		
 		$(SAVE_BUTTON_ID).click(function(){
-			self.disabled="true";
+			
+			if(self.currentFile == null){
+				console.log("Cannot save blank file");
+				return;
+			}
+			
+			var button = $(SAVE_BUTTON_ID);
+			button.attr("disabled","disabled");
+			var defBackground = button.css("background-color");
+			button.css("background-color", "darkgray");
+			button.text("Saving...");
+			
+			
+			
 			console.log("Saving: " + self.currentFile.id);
 			
 			self.currentFile.content = editor.getValue();
@@ -139,9 +155,15 @@ var sruide = {};
 							console.log("File saved...");
 							self.currentFile.updateData(data.data);
 							displayFile(self.currentFile);
+							button.removeAttr("disabled");
+							button.css("background-color", defBackground);
+							button.text("Save");
 						}
 						else{
 							console.error("Unable to save file.");
+							button.removeAttr("disabled");
+							button.css("background-color", defBackground);
+							button.text("Save");
 						}
 					});
 		});
@@ -177,6 +199,8 @@ var sruide = {};
 		editor.setValue(data.content);
 		//heightUpdateFunction();
 		editor.resize();
+		
+		$(SAVE_BUTTON_ID).show();
 		
 		//editor.goToLine(1);
 	}
