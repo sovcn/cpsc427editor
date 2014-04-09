@@ -127,6 +127,7 @@ var sruide = {};
 		
 		
 		$(SAVE_BUTTON_ID).click(function(){
+			self.disabled="true";
 			console.log("Saving: " + self.currentFile.id);
 			
 			self.currentFile.content = editor.getValue();
