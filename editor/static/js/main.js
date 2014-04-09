@@ -104,7 +104,25 @@ var sruide = {};
 		var self = this;
 		
 		$(FILE_COLUMN_ARROW_ID).click(function(){
-			$(FILE_COLUMN_ID).slideUp();
+			// RENEE WILL DO THIS!
+			var self = this;
+			if(self.src == "http://127.0.0.1:8000/static/img/arrow.gif")//if arrow is pointing left
+				{
+				 self.src= "/static/img/arrow2.png"; //flip arrow
+				 $(FILE_COLUMN_ID).width('7.5%');
+				 $(CONTENT_COLUMN_ID).width('91.5%');
+				 $(GREETING_ID).hide();
+				 $(FILE_LIST_ID).hide();
+				}
+			else //if pointing right, make left. 
+				{
+				 self.src = "/static/img/arrow.gif";
+				 $(FILE_COLUMN_ID).width('19%');
+				 $(CONTENT_COLUMN_ID).width('80%');
+				 $(GREETING_ID).show();
+				 $(FILE_LIST_ID).show();
+				 
+				}
 		});
 		
 		
