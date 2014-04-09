@@ -15,14 +15,14 @@
 			<p>Hello {{ user_full_name }}.<br/> You have <span id="num_files"></span> files.</p>
 			<p><a href="/editor/create_file">Create New File</a></p>
 		</div>
-		<ul id="file_list"></ul>
+		<ul id="file_list" style=""></ul>
 				<div id="arrow_container">
 					<img id="file_column_arrow" src="{% static "img/arrow.gif" %}" alt="Arrow"/>
 				</div>
             
                 <p id="file_list">Your Files</p>
               
-                <ul>
+                <ul style="overflow:hidden;">
                         <li id="one"><a href="#">htmleditor</a></li>
                 </ul>
 	</div>
