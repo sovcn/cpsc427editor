@@ -51,7 +51,8 @@ var sruide = {};
 	
 	var FILE_COLUMN_ARROW_ID = "#file_column_arrow";
 	
-	var SAVE_BUTTON_ID = "#save_file";
+	var LEFT_ARROW_PATH = "/static/img/arrow.gif";
+	var RIGHT_ARROW_PATH = "/static/img/arrow2.png";
 	
 	// namespace globals
 	var editor;
@@ -76,9 +77,6 @@ var sruide = {};
 		var self = this;
 		
 		self.files = [];
-		self.currentFile = null;
-		
-		$(SAVE_BUTTON_ID).hide();
 		
 		self.contentColumn = $(CONTENT_COLUMN_ID);
 		self.contentColumn.hide();
@@ -87,7 +85,6 @@ var sruide = {};
 		$(FILE_EDITOR_ID).height($(window).height()-120);
 		
 		$(FILE_COLUMN_ID).height(self.contentColumn.height());
-		
 		
 		$(window).resize(function(){
 			
@@ -104,68 +101,46 @@ var sruide = {};
 	}
 	
 	FileManager.prototype.registerUiEventHandlers = function(){
-		var self = this;
+		var leftPanelExpanded = true;
 		
 		$(FILE_COLUMN_ARROW_ID).click(function(){
 			// RENEE WILL DO THIS!
 			var self = this;
-			if(self.src == "http://127.0.0.1:8000/static/img/arrow.gif")//if arrow is pointing left
+			var expanded = true;
+			if(leftPanelExpanded)//if arrow is pointing left
 				{
-				 self.src= "/static/img/arrow2.png"; //flip arrow
-				 $(FILE_COLUMN_ID).width('7.5%');
-				 $(CONTENT_COLUMN_ID).width('91.5%');
+				// contract it
+				 self.src = RIGHT_ARROW_PATH; //flip arrow
+				 $(FILE_COLUMN_ID).animate({
+					 width: "7.5%"
+				 },{
+					 duration: 500
+				 });
+				 $(CONTENT_COLUMN_ID).animate({
+					 width: "91.5%"
+				 },500);
+				 
 				 $(GREETING_ID).hide();
 				 $(FILE_LIST_ID).hide();
+				 leftPanelExpanded = false;
 				}
 			else //if pointing right, make left. 
 				{
-				 self.src = "/static/img/arrow.gif";
-				 $(FILE_COLUMN_ID).width('19%');
-				 $(CONTENT_COLUMN_ID).width('80%');
-				 $(GREETING_ID).show();
-				 $(FILE_LIST_ID).show();
-				 
+				 self.src = LEFT_ARROW_PATH;
+				 $(FILE_COLUMN_ID).animate({
+					 width: "18%"
+				 },{
+					 duration: 500,
+					 done: function(){
+						 $(GREETING_ID).show();
+						 $(FILE_LIST_ID).show();
+					 }
+				 });
+				 $(CONTENT_COLUMN_ID).animate({
+					 width: "80%"
+				 },500);
+				 leftPanelExpanded = true;
 				}
-		});
-		
-		
-		$(SAVE_BUTTON_ID).click(function(){
-			
-			if(self.currentFile == null){
-				console.log("Cannot save blank file");
-				return;
-			}
-			
-			var button = $(SAVE_BUTTON_ID);
-			button.attr("disabled","disabled");
-			var defBackground = button.css("background-color");
-			button.css("background-color", "darkgray");
-			button.text("Saving...");
-			
-			
-			
-			console.log("Saving: " + self.currentFile.id);
-			
-			self.currentFile.content = editor.getValue();
-			
-			$.post("/ajax/editor/file/" + self.currentFile.id + "/update.json",
-					self.currentFile.toObject(),
-					function(data){
-						if( data.success ){
-							console.log("File saved...");
-							self.currentFile.updateData(data.data);
-							displayFile(self.currentFile);
-							button.removeAttr("disabled");
-							button.css("background-color", defBackground);
-							button.text("Save");
-						}
-						else{
-							console.error("Unable to save file.");
-							button.removeAttr("disabled");
-							button.css("background-color", defBackground);
-							button.text("Save");
-						}
-					});
 		});
 	};
 	
@@ -200,8 +175,6 @@ var sruide = {};
 		//heightUpdateFunction();
 		editor.resize();
 		
-		$(SAVE_BUTTON_ID).show();
-		
 		//editor.goToLine(1);
 	}
 	
@@ -227,7 +200,6 @@ var sruide = {};
 					var fileClosure = file;
 					return function(){
 						console.log("Clicked file(" + fileClosure.id + ")");
-						self.currentFile = fileClosure;
 						displayFile(fileClosure);
 					};
 				})());
@@ -247,35 +219,16 @@ var sruide = {};
 		var self = this;
 		
 		self.id = data.id;
-	
-		self.updateData(data);
-		
-	}
-	
-	File.prototype.updateData = function(data){
-		var self = this;
-		
 		self.content = data.content;
 		self.created_by = data.created_by;
 		self.file_path = data.file_path;
 		self.file_type = data.file_type;
 		self.filename = data.filename;
 		self.users = data.users;
-	};
-	
-	File.prototype.toObject = function(){
-		var self = this;
 		
-		return {
-			id: self.id,
-			pk: self.id,
-			content: self.content,
-			created_by: self.created_by,
-			file_path: self.file,
-			filename: self.filename,
-			users: self.users
-		}
 	}
+	
+	
 	
 	sruide.init = function(){
 		editor = ace.edit("file_editor");

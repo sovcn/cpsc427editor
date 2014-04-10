@@ -12,25 +12,23 @@
 
 	<div id="file_column">
 		<div id="greeting" style="display: none;">
-			<p>Hello {{ user_full_name }}.<br/> You have <span id="num_files"></span> files.</p>
-			<p><a href="/editor/create_file">Create New File</a></p>
+			<!--<p>Hello {{ user_full_name }}.<br/> You have <span id="num_files"></span> files.</p>
+			<p><a href="/editor/create_file">Create New File</a></p>-->
 		</div>
-		<ul id="file_list" style=""></ul>
 				<div id="arrow_container">
 					<img id="file_column_arrow" src="{% static "img/arrow.gif" %}" alt="Arrow"/>
 				</div>
             
-                <p id="file_list">Your Files</p>
+                <p id="file_list_header">Your Files</p>
               
-                <ul style="overflow:hidden;">
-                        <li id="one"><a href="#">htmleditor</a></li>
+                <ul id="file_list" style="overflow:hidden;">
                 </ul>
 	</div>
 	
 	<div id="content_column">
 		<div id="error_message" style="display: none; color: #FF0000;"></div>
 		<article id="file_content">
-			<header><h1></h1><button id="save_file">Save</button></header>
+			<header><h1></h1></header>
 			<div id="file_editor"></div>
 		</article>
 	</div>
