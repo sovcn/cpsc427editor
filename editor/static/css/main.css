@@ -202,7 +202,8 @@ nav#nav2{
     width: auto;
 }
 
-p#file_list{
+p#file_list_header{
+	margin-top: 0px;
     font-size: 18px;
     font-weight: lighter;
     color: #666666;
