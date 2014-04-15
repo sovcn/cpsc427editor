@@ -52,6 +52,34 @@ def view_file(request, file_id):
     return render(request, 'editor/view_file.html', context)
 	
 @login_required
+def preview_file(request, file_id):
+    user = request.user
+    file = get_object_or_404(File,pk=int(file_id))
+    
+    has_permission = False
+    
+    file_users = file.users.all()
+    if user.id != file.created_by.id:
+        for shared_user in file_users:
+            if user.id == shared_user.id:
+                has_permission = True
+                break
+    else:
+        has_permission = True
+
+    if not has_permission:
+        return HttpResponse("You do not have permission to view this file.")
+    
+    if file.file_type == 'HTML':
+        return HttpResponse(content_type="text/html", content=file.content)
+    elif file.file_type == 'JS':
+        return HttpResponse(content_type="application/javascript", content=file.content)
+    elif file.file_type == 'SVG':
+        return HttpResponse(content_type="image/svg+xml", content=file.content)
+    else:
+        return HttpResponse("Invalid File Type.")
+
+@login_required
 def create_file(request):
 	if request.method == 'POST': # If the form has been submitted...
         

@@ -252,6 +252,8 @@ var sruide = {};
 	
 	
 	FileManager.prototype.displayFile = function(data){
+		var self = this;
+		
 		$("article#file_content header h1").text(data.file_path);
 		//$("article#file_content div#file_editor").text(data.content);
 		
