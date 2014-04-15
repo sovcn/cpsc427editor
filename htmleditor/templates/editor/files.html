@@ -2,7 +2,12 @@
 
 {% load static %}
 
+{% block header_css %}
+	<link rel="stylesheet" href="{% static "jstree/dist/themes/default/style.min.css" %}"/>
+{% endblock %}
+
 {% block body_js %}
+	<script src="{% static "jstree/dist/jstree.min.js" %}"></script>
 	<script src="{% static "js/main.js" %}"></script>
 {% endblock %}
 
@@ -21,8 +26,10 @@
             
                 <p id="file_list_header">Your Files</p>
               
-                <ul id="file_list" style="overflow:hidden;">
-                </ul>
+              	<div id="file_list_container">
+	                <ul id="file_list" style="overflow:hidden;">
+	                </ul>
+                </div>
 	</div>
 	
 	<div id="content_column">

@@ -38,7 +38,7 @@ var sruide = {};
 (function(){
 
 	// constants
-	var FILE_LIST_ID = "#file_list";
+	var FILE_LIST_ID = "#file_list_container";
 	var NUM_FILES_ID = "#num_files";
 	
 	var GREETING_ID = "#greeting";
@@ -73,6 +73,13 @@ var sruide = {};
 		$(CONTENT_COLUMN_ID).show();
 	}
 	
+	function editorResize(self){
+		$(FILE_EDITOR_ID).width(self.contentColumn.width()-5);
+		$(FILE_EDITOR_ID).height($(window).height()-120);
+		editor.resize();
+		
+		$(FILE_COLUMN_ID).height(self.contentColumn.height());
+	}
 	
 	// Class FileManager
 	function FileManager(){
@@ -87,19 +94,10 @@ var sruide = {};
 		
 		$(SAVE_BUTTON_ID).hide();
 		
-		$(FILE_EDITOR_ID).width(self.contentColumn.width()-5);
-		$(FILE_EDITOR_ID).height($(window).height()-120);
-		
-		$(FILE_COLUMN_ID).height(self.contentColumn.height());
+		editorResize(self);
 		
 		$(window).resize(function(){
-			
-			
-			$(FILE_EDITOR_ID).width(self.contentColumn.width()-5);
-			$(FILE_EDITOR_ID).height($(window).height()-120);
-			editor.resize();
-			
-			$(FILE_COLUMN_ID).height(self.contentColumn.height());
+			editorResize(self);
 		});
 		
 		self.registerUiEventHandlers();
@@ -176,7 +174,7 @@ var sruide = {};
 						if( data.success ){
 							console.log("File saved...");
 							self.currentFile.updateData(data.data);
-							displayFile(self.currentFile);
+							self.displayFile(self.currentFile);
 							button.removeAttr("disabled");
 							button.css("background-color", defBackground);
 							button.text("Save");
@@ -195,13 +193,52 @@ var sruide = {};
 	FileManager.prototype.fetchUserFiles = function(){
 		var self = this;
 		
+		// Path is an array of path elements separated by '/'
+		function parsePath(path, hierarchy, file){
+			if( path.length == 1 ){
+				// File
+				hierarchy.files.push(file);
+			}
+			else{
+				// Folder
+				var folder;
+				if(path[0] in hierarchy.folders){
+					// Folder exists...
+					folder = hierarchy.folders[path[0]];
+				}
+				else{
+					// Create the folder.
+					folder = {
+						folders: {},
+						files: []
+					};
+				}
+				
+				var parsedFolder = parsePath(path.slice(1, path.length), folder, file);
+				
+				hierarchy.folders[path[0]] = parsedFolder;
+			}
+			return hierarchy;
+		}
+		
 		$.post("/ajax/editor/file/user_file_list.json", function(data){
 			if( data.success ){
 				
 				self.files = [];
 				
+				self.hierarchy = {
+					folders: {},
+					files: []
+				};
+				
+				
 				for(var index in data.data){
 					var file = new File(data.data[index]);
+					
+					var pathArr = file.file_path.split('/');
+					pathArr = pathArr.slice(1,pathArr.length);
+					self.hierarchy = parsePath(pathArr, self.hierarchy, file);
+					
 					self.files.push(file);
 				}
 				
@@ -214,18 +251,29 @@ var sruide = {};
 	};
 	
 	
-	function displayFile(data){
+	FileManager.prototype.displayFile = function(data){
 		$("article#file_content header h1").text(data.file_path);
 		//$("article#file_content div#file_editor").text(data.content);
 		
 		editor.setValue(data.content);
 		//heightUpdateFunction();
-		editor.resize();
+		switch(data.file_type){
+		case "HTML":
+			editor.getSession().setMode("ace/mode/html");
+			break;
+		case "JS":
+			editor.getSession().setMode("ace/mode/javascript");
+			break;
+		case "SVG":
+			editor.getSession().setMode("ace/mode/svg");
+			break;
+		}
+		editorResize(self);
 		
 		$(SAVE_BUTTON_ID).show();
 		
 		//editor.goToLine(1);
-	}
+	};
 	
 	FileManager.prototype.displayFileList = function(){
 		var self = this;
@@ -237,28 +285,76 @@ var sruide = {};
 			var num_files = self.files.length;
 			$(NUM_FILES_ID).text(num_files);
 			
+			var fileListContainer = $("#file_list_container");
 			var fileListDOM = $("#file_list");
-			for(var index in self.files ){
-				var file = self.files[index];
-				var link = $("<a>");
-				link.text(file.filename)
-					.attr("href", "#");
+			
+			var callbacks = [];
+			
+			// Used to recursively build the file hiearchy tree
+			function constructDOM(hierarchy, domContainer){
 				
-				link.click((function(){
-					// Click closure
-					var fileClosure = file;
-					return function(){
-						console.log("Clicked file(" + fileClosure.id + ")");
-						self.currentFile = fileClosure;
-						displayFile(fileClosure);
-					};
-				})());
+				for(var index in hierarchy.folders ){
+					var folder = hierarchy.folders[index];
+					
+					var folderItem = $("<li>");
+					folderItem.text(index);
+					
+					var folderContainer = $("<ul>");
+					folderItem.append(folderContainer);
+					
+					domContainer.append(folderItem);
+					
+					constructDOM(folder, folderContainer);
+				}
 				
-				var listItem = $("<li>");
-				listItem.append(link);
 				
-				fileListDOM.append(listItem);
+				for(var index in hierarchy.files ){
+					var file = hierarchy.files[index];
+					var link = $("<a>");
+					link.text(file.filename)
+						.attr("href", "#");
+					
+					callbacks[file.id] = (function(){
+						// Click closure
+						var fileClosure = file;
+						return function(){
+							console.log("Clicked file(" + fileClosure.id + ")");
+							self.currentFile = fileClosure;
+							self.displayFile(fileClosure);
+						};
+					})();
+					
+					var listItem = $("<li>");
+					
+					switch(file.file_type){
+					case "HTML":
+						listItem.attr('data-jstree', '{"icon":"http://openiconlibrary.sourceforge.net/gallery2/open_icon_library-full/icons/png/16x16/mimetypes/oxygen-style/application-rtf.png"}');
+						break;
+					case "JS":
+						listItem.attr('data-jstree', '{"icon":"http://openiconlibrary.sourceforge.net/gallery2/open_icon_library-full/icons/png/16x16/mimetypes/gnome-style/application-javascript.png"}');
+						break;
+					case "SVG":
+						listItem.attr('data-jstree', '{"icon":"http://openiconlibrary.sourceforge.net/gallery2/open_icon_library-full/icons/png/16x16/mimetypes/gnome-style/image-svg+xml.png"}');
+						break;
+					}
+					
+					
+					listItem.attr('id', 'file_' + file.id);
+					
+					listItem.append(link);
+					
+					domContainer.append(listItem);
+				}
+				
 			}
+			
+			constructDOM(self.hierarchy, fileListDOM);
+			
+			fileListContainer.jstree()
+			.on('select_node.jstree', function(e, data){
+				var file_id = data.selected[0].replace("file_", "");
+				callbacks[file_id]();
+			});
 			
 			setLoaded();
 		}

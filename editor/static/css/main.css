@@ -194,6 +194,9 @@ div#file_editor{
 div#arrow_container{ 
 	text-align: right;
 	margin-right: 5px;
+}
+
+div#arrow_container img{
 	cursor: pointer;
 }
 
