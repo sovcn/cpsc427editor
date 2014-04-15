@@ -75,7 +75,7 @@ def preview_file(request, file_id):
     elif file.file_type == 'JS':
         return HttpResponse(content_type="application/javascript", content=file.content)
     elif file.file_type == 'SVG':
-        return HttpResponse(content_type="image/svg+xml", content=file.content)
+        return HttpResponse(content_type="text/html", content=file.content)
     else:
         return HttpResponse("Invalid File Type.")
 
