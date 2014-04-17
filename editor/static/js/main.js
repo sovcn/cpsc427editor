@@ -55,6 +55,7 @@ var sruide = {};
 	var RIGHT_ARROW_PATH = "/static/img/arrow2.png";
 	
 	var SAVE_BUTTON_ID = "#save_file";
+	var WELCOME_ID ="#welcome";
 	
 	// namespace globals
 	var editor;
@@ -70,6 +71,7 @@ var sruide = {};
 	function setLoaded(){
 		$(LOADING_ID).hide();
 		$(GREETING_ID).show();
+		$(WELCOME_ID).show();
 		$(CONTENT_COLUMN_ID).show();
 	}
 	
