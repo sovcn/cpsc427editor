@@ -193,6 +193,7 @@ var sruide = {};
 	FileManager.prototype.fetchUserFiles = function(){
 		var self = this;
 		
+		// Recursively creates a file hierarchy based on each files path name
 		// Path is an array of path elements separated by '/'
 		function parsePath(path, hierarchy, file){
 			if( path.length == 1 ){
