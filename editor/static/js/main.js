@@ -126,7 +126,6 @@ var sruide = {};
 					 width: "91.5%"
 				 },500);
 				 
-				 $(GREETING_ID).hide();
 				 $(FILE_LIST_ID).hide();
 				 leftPanelExpanded = false;
 				}

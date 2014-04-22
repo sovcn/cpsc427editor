@@ -132,11 +132,11 @@ div.header-container h1.title{
 
 div.header-container ul.navigation{
 	display: block;
-	width: 200px;
+	width: 300px;
 	float: right;
 	text-align: right;
-	margin-top: 13px;
-	margin-right: 17px;
+	margin-top: 0px;
+	margin-right: 3px;
 }
 
 div.header-container ul.navigation li{
@@ -156,7 +156,8 @@ div.header-container ul.navigation a:hover{
 div.main-container{
 	margin: 0;
 	padding: 0;
-	margin-left: 90px;
+	margin-left: 100px;
+	width: 1164px;
 	margin-right: 100px;
 	border: 1px solid #c9c9c9;
 	border-top: 0;
@@ -178,7 +179,7 @@ div#file_column{
 }
 
 div#content_column{
-	margin: 0;
+   margin: 0;
    padding: 0;
    width: 80%;
    float: right;
@@ -191,6 +192,22 @@ div#file_editor{
 }
 
 /*Renee Work*/
+
+div#greeting{
+	    border-right: 0;
+		margin-left: 0;
+		padding-top: 10px;
+		height: 0px;
+		text-align: right;
+		margin-top: 0px;
+		width: 300px;
+		margin-left: 740px;
+		font-family: wf_segoe-ui_light,'Segoe UI Light','Segoe WP Light',wf_segoe-ui_normal,'Segoe UI',Segoe,'Segoe WP',Tahoma,Verdana,Arial,sans-serif;
+		font-style: italic;
+		margin-right: 3px;
+		color: #CCCCCC;
+			}
+
 div#arrow_container{ 
 	text-align: right;
 	margin-right: 5px;
