@@ -86,6 +86,7 @@ STATIC_URL = '/static/'
 
 
 TEMPLATE_DIRS = (
+    'H:/cpsc427editor/htmleditor/templates',
 	'cpsc427editor/htmleditor/templates',
 )
 

@@ -6,7 +6,6 @@
 # Packages
 *.egg
 *.egg-info
-dist
 build
 eggs
 parts
@@ -32,3 +31,6 @@ nosetests.xml
 
 # Mr Developer
 .mr.developer.cfg
+
+
+htmleditor.db
