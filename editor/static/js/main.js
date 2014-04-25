@@ -62,6 +62,8 @@ var sruide = {};
 	// namespace globals
 	var editor;
 	
+	var windowObject = new Object();
+	windowObject.closed = true;
 	
 	function displayErrorMessage(message){
 		$("div#greeting").hide();
@@ -281,25 +283,39 @@ var sruide = {};
 		
 		$(PREVIEW_BUTTON_ID).click(function(){
 			
-			//alert(self.currentFile.);
+			var file = self.currentFile;
 			
-			
-			
-			if(self.currentFile == null){
+		
+			if(file == null){
 				console.log("Cannot preview blank file");
 				return;
 			}
 			
 			var button = $(PREVIEW_BUTTON_ID);
-			button.attr("disabled","disabled");
+			//button.attr("disabled","disabled");
 			var defBackground = button.css("background-color");
 			button.css("background-color", "darkgray");
 			
-			self.currentFile.content = editor.getValue();
 			
-			var url = "/editor/file/" + self.currentFile.id;
+			file.content = editor.getValue();
 			
-			window.open(url);
+			var url = "/editor/file/" + file.id;
+			var windowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+			
+			
+			
+			if(windowObject == null || windowObject.closed){
+				
+				windowObject = window.open(url);
+				//button.attr("disabled","disabled");
+			}
+			
+			else {
+			   
+				windowObject.focus();
+			}
+				
+				
 			
 			
 			
