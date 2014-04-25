@@ -13,6 +13,19 @@
 
 {% block content %}
 
+
+<div id="create-file-dialog" title="Create New File" style="display: none;">
+  <p class="validateTips">All form fields are required.</p>
+ 
+  <form>
+  <fieldset>
+    <label for="name">File Path</label>
+    <small>ex: /root/file.html</small>
+    <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
+  </fieldset>
+  </form>
+</div>
+
 	<div id="content_loading"><img src="{% static "img/ajax-loader.gif" %}" alt="Loading..." /></div>
 
 	<div id="file_column">
@@ -24,7 +37,7 @@
 					<img id="file_column_arrow" src="{% static "img/arrow.gif" %}" alt="Arrow"/>
 				</div>
             
-                <p id="file_list_header">Your Files</p>
+                <p id="file_list_header">Your Files <button id="newFileButton">New File</button></p>
               
               	<div id="file_list_container">
 	                <ul id="file_list" style="overflow:hidden;">

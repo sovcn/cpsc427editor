@@ -56,6 +56,8 @@ var sruide = {};
 	
 	var SAVE_BUTTON_ID = "#save_file";
 	
+	var NEW_FILE_BUTTON_ID = "#newFileButton";
+	
 	// namespace globals
 	var editor;
 	
@@ -108,6 +110,95 @@ var sruide = {};
 		var self = this;
 		
 		var leftPanelExpanded = true;
+		
+		$(NEW_FILE_BUTTON_ID).click(function(){
+			
+			var name = $( "#name" );
+			var allFields = $( [] ).add( name );
+			var tips = $( ".validateTips" );
+			
+			function updateTips( t ) {
+			      tips
+			        .text( t )
+			        .addClass( "ui-state-highlight" );
+			      setTimeout(function() {
+			        tips.removeClass( "ui-state-highlight", 1500 );
+			      }, 500 );
+			    }
+			
+			
+			function checkLength( o, n, min, max ) {
+			      if ( o.val().length > max || o.val().length < min ) {
+			        o.addClass( "ui-state-error" );
+			        updateTips( "Length of " + n + " must be between " +
+			          min + " and " + max + "." );
+			        return false;
+			      } else {
+			        return true;
+			      }
+			    }
+			
+			// https://jqueryui.com/dialog/#modal-form
+			$("#create-file-dialog").dialog({
+			      autoOpen: true,
+			      height: 300,
+			      width: 350,
+			      modal: true,
+			      buttons: {
+			        "Create File": function() {
+			          var bValid = true;
+			          allFields.removeClass( "ui-state-error" );
+			 
+			          bValid = bValid && checkLength( name, "file name", 3, 200 );
+			 
+			          //bValid = bValid && checkRegexp( name, /^[a-z]([0-9a-z_])+$/i, "Username may consist of a-z, 0-9, underscores, begin with a letter." );
+			          // From jquery.validate.js (by joern), contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
+			          //bValid = bValid && checkRegexp( email, /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i, "eg. ui@jquery.com" );
+			          //bValid = bValid && checkRegexp( password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
+			 
+			          if ( bValid ) {
+			            // CREATE THE NEW FILE...
+			        	  var file = {};
+			        	  // add the right file information from the path...
+			        	  // You might need to put in empty/fake data to get it to create the file.
+			        	  /*
+			        	   *  filename = models.CharField(max_length=50) // required
+							    file_type = models.CharField(max_length=4, choices=FILE_CHOICES, default=HTML) // they need to be able to choose this
+							    file_path = models.CharField(max_length=255) // from the file path they enter		    
+					
+							    created_by = models.ForeignKey(User) // Let me get back to you on this...
+							    content = models.TextField() // to to blank: ""
+			        	   */
+			        	  
+			        	  // At this point, file should be an {} (object) containing 
+			        	  $.post("/ajax/editor/file.json",
+			  					file,
+			  					function(data){
+			  						if( data.success ){
+			  							console.log("File saved...");
+			  							// Refresh the file tree and load the file we just created...
+			  						}
+			  						else{
+			  							console.error("Unable to save file.");
+			  							// Let the user know an error has occured and do somethign about it.
+			  						}
+			  					});
+			        	  
+			        	  $.post
+			        	  
+			        	  console.log("Create new file.");
+			            $( this ).dialog( "close" );
+			          }
+			        },
+			        Cancel: function() {
+			          $( this ).dialog( "close" );
+			        }
+			      },
+			      close: function() {
+			        allFields.val( "" ).removeClass( "ui-state-error" );
+			      }
+			    });
+		});
 		
 		$(FILE_COLUMN_ARROW_ID).click(function(){
 			// RENEE WILL DO THIS!
