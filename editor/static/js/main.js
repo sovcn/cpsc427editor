@@ -56,6 +56,8 @@ var sruide = {};
 	
 	var SAVE_BUTTON_ID = "#save_file";
 	
+	var PREVIEW_BUTTON_ID = "#preview_file";
+	
 	// namespace globals
 	var editor;
 	
@@ -185,6 +187,32 @@ var sruide = {};
 							button.text("Save");
 						}
 					});
+		});
+		
+		$(PREVIEW_BUTTON_ID).click(function(){
+			
+			//alert(self.currentFile.);
+			
+			
+			
+			if(self.currentFile == null){
+				console.log("Cannot preview blank file");
+				return;
+			}
+			
+			var button = $(PREVIEW_BUTTON_ID);
+			button.attr("disabled","disabled");
+			var defBackground = button.css("background-color");
+			button.css("background-color", "darkgray");
+			
+			self.currentFile.content = editor.getValue();
+			
+			var url = "/editor/file/" + self.currentFile.id;
+			
+			window.open(url);
+			
+			
+			
 		});
 	};
 	
