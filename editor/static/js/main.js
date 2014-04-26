@@ -62,8 +62,8 @@ var sruide = {};
 	// namespace globals
 	var editor;
 	
-	var windowObject = new Object();
-	windowObject.closed = true;
+	var popupWins = new Array();
+	
 	
 	function displayErrorMessage(message){
 		$("div#greeting").hide();
@@ -98,6 +98,7 @@ var sruide = {};
 		self.contentColumn.hide();
 		
 		$(SAVE_BUTTON_ID).hide();
+		$(PREVIEW_BUTTON_ID).hide();
 		
 		editorResize(self);
 		
@@ -292,7 +293,7 @@ var sruide = {};
 			}
 			
 			var button = $(PREVIEW_BUTTON_ID);
-			//button.attr("disabled","disabled");
+			
 			var defBackground = button.css("background-color");
 			button.css("background-color", "darkgray");
 			
@@ -300,22 +301,36 @@ var sruide = {};
 			file.content = editor.getValue();
 			
 			var url = "/editor/file/" + file.id;
-			var windowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+			var winArgs = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+			var winName = file.id;
 			
+			windowOpener(url,winName,winArgs);
 			
-			
-			if(windowObject == null || windowObject.closed){
+			//borrowed from http://www.codestore.net/store.nsf/unid/DOMM-4PYJ3S?OpenDocument
+			function windowOpener(url, name, args) {
+				/******************************* 
+				the popupWins array stores an object reference for
+				each separate window that is called, based upon
+				the name attribute that is supplied as an argument
+				*******************************/
+				if ( typeof( popupWins[name] ) != "object" ){
+				popupWins[name] = window.open(url,name,args);
+				button.css("background-color", defBackground);
+				} else {
+				if (!popupWins[name].closed){
+				popupWins[name].location.href = url;
+				button.css("background-color", defBackground);
+				} else {
+				popupWins[name] = window.open(url, name,args);
+				button.css("background-color", defBackground);
+				}
+				}
+				popupWins[name].focus();
+				popupWins[name].reload();
 				
-				windowObject = window.open(url);
-				//button.attr("disabled","disabled");
-			}
+				}
+				
 			
-			else {
-			   
-				windowObject.focus();
-			}
-				
-				
 			
 			
 			
@@ -407,6 +422,7 @@ var sruide = {};
 		editorResize(self);
 		
 		$(SAVE_BUTTON_ID).show();
+		$(PREVIEW_BUTTON_ID).show();
 		
 		//editor.goToLine(1);
 	};
