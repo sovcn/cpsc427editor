@@ -157,7 +157,8 @@ var sruide = {};
 			          bValid = bValid && checkLength( name, "file name", 3, 200 );
 			 
 			          if ( bValid ) {
-			        	  
+			        	  var file_path = name.val().split("/");
+			        	  file_path = file_path[file_path.length-1];
 			            // CREATE THE NEW FILE...
 			        	  var file = {
 			        			  		                     
@@ -182,6 +183,7 @@ var sruide = {};
 			  					file,
 			  					function(data){
 			  						if( data.success ){
+			  							location.reload();
 			  							console.log("File saved...");
 			  							// Refresh the file tree and load the file we just created...
 			  						}
