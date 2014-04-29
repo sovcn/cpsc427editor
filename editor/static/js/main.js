@@ -178,7 +178,7 @@ var sruide = {};
 			        	   */
 			        	  
 			        	  // At this point, file should be an {} (object) containing 
-			        	  $.post("/ajax/editor/file.json",
+			        	  $.post("/ajax/editor/file/create_file.json",
 			  					file,
 			  					function(data){
 			  						if( data.success ){
