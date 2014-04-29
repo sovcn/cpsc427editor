@@ -18,7 +18,23 @@ class FileEndpoint(ajax.endpoints.ModelEndpoint):
 	
 	def create_file(self, request):
 		
-		file = None
+		POST = request.POST
+		filename = POST["filename"]
+		file_path = POST["file_path"]
+		file_type = POST["file_type"]
+		content = POST["content"]
+		
+		user = request.user
+		
+		file = File()
+		file.filename = filename
+		file.file_path = file_path
+		file.file_type = file_type
+		file.content = content
+		
+		file.created_by = user
+		
+		file.save()
 		
 		return file
 	
