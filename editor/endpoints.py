@@ -36,6 +36,9 @@ class FileEndpoint(ajax.endpoints.ModelEndpoint):
 		
 		file.save()
 		
-		return file
+		fileObj = model_to_dict(file)
+		fileObj['pk'] = fileObj['id']
+		
+		return fileObj
 	
 ajax.endpoint.register(File, FileEndpoint)
