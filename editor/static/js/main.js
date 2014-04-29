@@ -157,14 +157,15 @@ var sruide = {};
 			          bValid = bValid && checkLength( name, "file name", 3, 200 );
 			 
 			          if ( bValid ) {
-			        	  var file_path = name.val().split("/");
-			        	  file_path = file_path[file_path.length-1];
+			        	  var file_parsed = name.val().split('/');
+			        	  file_parsed = file_parsed[file_parsed.length-1];
+			            
 			            // CREATE THE NEW FILE...
 			        	  var file = {
 			        			  		                     
-			        			file_path:name.val(),
+			        			filename:file_parsed,
 			        			file_type:$( "input:radio[name=radio]:checked" ).val(),
-			        			filename:name.val(),
+			        			file_path:name.val(),
 			        			content:""
 			        	  };
 			        	  // add the right file information from the path...
@@ -227,10 +228,13 @@ var sruide = {};
 				 },500);
 				 
 				 $(FILE_LIST_ID).hide();
+				 $(NEW_FILE_BUTTON_ID).hide();
+				 
 				 leftPanelExpanded = false;
 				}
 			else //if pointing right, make left. 
 				{
+				 $(NEW_FILE_BUTTON_ID).show();
 				 self.src = LEFT_ARROW_PATH;
 				 $(FILE_COLUMN_ID).animate({
 					 width: "18%"

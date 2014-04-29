@@ -136,7 +136,7 @@ div.header-container ul.navigation{
 	float: right;
 	text-align: right;
 	margin-top: 0px;
-	margin-right: 3px;
+	margin-right: 6px;
 }
 
 div.header-container ul.navigation li{
@@ -233,7 +233,10 @@ p#file_list_header{
     width:97%;
     padding-left: 3%;
 }
-
+img#newFileButton{
+	margin-bottom: 3px;
+	cursor: pointer;
+}
 li#one{
     color: #cccccc;
     font-size: 14px;

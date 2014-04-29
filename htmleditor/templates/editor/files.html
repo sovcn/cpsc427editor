@@ -34,14 +34,12 @@
 
 	<div id="file_column">
 		<div id="greeting" style="display: none;">
-			<!--<p>Hello {{ user_full_name }}.<br/> You have <span id="num_files"></span> files.</p>
-			<p><a href="/editor/create_file">Create New File</a></p>-->
 		</div>
 				<div id="arrow_container">
 					<img id="file_column_arrow" src="{% static "img/arrow.gif" %}" alt="Arrow"/>
 				</div>
             
-                <p id="file_list_header">Your Files <button id="newFileButton">New File</button></p>
+                <p id="file_list_header">Your Files&nbsp;&nbsp;<img id="newFileButton" src="{% static "img/plus.png" %}" alt="add new file" /></p>
               
               	<div id="file_list_container">
 	                <ul id="file_list" style="overflow:hidden;">
