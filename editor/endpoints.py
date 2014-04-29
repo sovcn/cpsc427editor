@@ -16,4 +16,10 @@ class FileEndpoint(ajax.endpoints.ModelEndpoint):
 			
 		return file_list
 	
+	def create_file(self, request):
+		
+		file = None
+		
+		return file
+	
 ajax.endpoint.register(File, FileEndpoint)
