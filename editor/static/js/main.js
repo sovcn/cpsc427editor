@@ -153,17 +153,39 @@ var sruide = {};
 			          //alert(document.getElementById("name").value);
 			          var bValid = true;
 			          allFields.removeClass( "ui-state-error" );
-			 
-			          bValid = bValid && checkLength( name, "file name", 3, 200 );
-			 
-			          if ( bValid ) {
-			        	  var file_parsed = name.val().split('/');
-			        	  file_parsed = file_parsed[file_parsed.length-1];
-			            
+			          var file_parsed = name.val().split('/');
+	           	      file_parsed.shift(); //removes first blank element
+	           	      file_parsed = file_parsed; //set the array 
+	           	      var file_array_size = file_parsed.length; //size of array
+	           	      //var puncFlag = parseInt(file_parsed[0].lastIndexOf('.')); //if 1, period found. if -1, not found. used to test for extension in file
+	           	      var extension = file_parsed[0].substring(file_parsed[0].lastIndexOf('.'), file_parsed[0].length);
+	           	     
+	           	      if (extension != ".html" && extension != ".svg" && extension != ".js")
+			        	  {
+			        	   bValid = false;
+			        	   alert("bad ext");
+			        	  }
+			          else if (checkLength ( name, "file name", 3, 200 ) == false)
+			              {
+			        	   bValid = false;
+			        	   alert("too short");
+			              }
+			          else if (name.val().charAt(0) != '/')
+			        	  {
+			        	  bValid = false;
+			        	  alert("Please use '/' format")
+			        	  }
+			          else
+			        	  {
+			        	   bValid  = true;
+			        	  }
+	           	      
+			          if (bValid) 
+			          {  	   
 			            // CREATE THE NEW FILE...
 			        	  var file = {
 			        			  		                     
-			        			filename:file_parsed,
+			        			filename:file_parsed[0],
 			        			file_type:$( "input:radio[name=radio]:checked" ).val(),
 			        			file_path:name.val(),
 			        			content:""
@@ -199,6 +221,11 @@ var sruide = {};
 			        	  console.log("Create new file.");
 			            $( this ).dialog( "close" );
 			          }
+			          else
+			        	  {
+			        	   
+			        	  }
+			     
 			        },
 			        Cancel: function() {
 			          $( this ).dialog( "close" );
@@ -209,7 +236,7 @@ var sruide = {};
 			      }
 			    });
 		});
-		
+	
 		$(FILE_COLUMN_ARROW_ID).click(function(){
 			// RENEE WILL DO THIS!
 			var self = this;
