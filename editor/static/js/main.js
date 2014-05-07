@@ -56,6 +56,7 @@ var sruide = {};
 	
 	var SAVE_BUTTON_ID = "#save_file";
 	
+	var DELETE_BUTTON_ID = "#delete_file";
 	var DOWNLOAD_BUTTON_ID = "#download_file";
 	var PREVIEW_BUTTON_ID = "#preview_file";
 	var NEW_FILE_BUTTON_ID = "#newFileButton";
@@ -98,6 +99,7 @@ var sruide = {};
 		self.contentColumn = $(CONTENT_COLUMN_ID);
 		self.contentColumn.hide();
 		
+		$(DELETE_BUTTON_ID).hide();
 		$(SAVE_BUTTON_ID).hide();
 		$(PREVIEW_BUTTON_ID).hide();
 		$(DOWNLOAD_BUTTON_ID).hide();
@@ -402,6 +404,48 @@ var sruide = {};
 			windowOpener(url,winName,winArgs);	
 			
 		});
+		
+		
+		$(DELETE_BUTTON_ID).click(function(){
+			
+			var file = self.currentFile;
+			
+		
+			if(file == null){
+				console.log("Cannot preview blank file");
+				return;
+			}
+			
+			// Implement delete functionality.
+			$("#delete-file-dialog").dialog({
+		      buttons : {
+		        "Confirm" : function() {
+		          // Delete the file...
+		        	
+		        	var dialog = this;
+		        	$.post("/ajax/editor/file/" + self.currentFile.id + "/delete.json",
+						self.currentFile.toObject(),
+						function(data){
+							if( data.success ){
+								console.log("File deleted...");
+								self.currentFile = null;
+								editor.setValue("");
+								$(dialog).dialog("close");
+								location.reload();
+							}
+							else{
+								console.error("Unable to save file.");
+								$(dialog).dialog("close");
+							}
+						});
+		        },
+		        "Cancel" : function() {
+		          $(this).dialog("close");
+		        }
+		      }
+		    });
+			
+		});	
 	};
 	
 	
@@ -488,6 +532,7 @@ var sruide = {};
 		}
 		editorResize(self);
 		
+		$(DELETE_BUTTON_ID).show();
 		$(SAVE_BUTTON_ID).show();
 		$(PREVIEW_BUTTON_ID).show();
 		$(DOWNLOAD_BUTTON_ID).show();
