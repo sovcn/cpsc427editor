@@ -56,6 +56,7 @@ var sruide = {};
 	
 	var SAVE_BUTTON_ID = "#save_file";
 	
+	var DOWNLOAD_BUTTON_ID = "#download_file";
 	var PREVIEW_BUTTON_ID = "#preview_file";
 	var NEW_FILE_BUTTON_ID = "#newFileButton";
 	
@@ -99,6 +100,7 @@ var sruide = {};
 		
 		$(SAVE_BUTTON_ID).hide();
 		$(PREVIEW_BUTTON_ID).hide();
+		$(DOWNLOAD_BUTTON_ID).hide();
 		
 		editorResize(self);
 		
@@ -347,6 +349,30 @@ var sruide = {};
 					});
 		});
 		
+		//borrowed from http://www.codestore.net/store.nsf/unid/DOMM-4PYJ3S?OpenDocument
+		function windowOpener(url, name, args) {
+			/******************************* 
+			the popupWins array stores an object reference for
+			each separate window that is called, based upon
+			the name attribute that is supplied as an argument
+			*******************************/
+			if ( typeof( popupWins[name] ) != "object" ){
+			popupWins[name] = window.open(url,name,args);
+			button.css("background-color", defBackground);
+			} else {
+			if (!popupWins[name].closed){
+			popupWins[name].location.href = url;
+			button.css("background-color", defBackground);
+			} else {
+			popupWins[name] = window.open(url, name,args);
+			button.css("background-color", defBackground);
+			}
+			}
+			popupWins[name].focus();
+			popupWins[name].reload();
+			
+		}
+		
 		$(PREVIEW_BUTTON_ID).click(function(){
 			
 			var file = self.currentFile;
@@ -359,45 +385,31 @@ var sruide = {};
 			
 			var button = $(PREVIEW_BUTTON_ID);
 			
-			var defBackground = button.css("background-color");
-			button.css("background-color", "darkgray");
-			
-			
-			file.content = editor.getValue();
-			
 			var url = "/editor/file/" + file.id;
 			var winArgs = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
 			var winName = file.id;
 			
-			windowOpener(url,winName,winArgs);
+			windowOpener(url,winName,winArgs);	
 			
-			//borrowed from http://www.codestore.net/store.nsf/unid/DOMM-4PYJ3S?OpenDocument
-			function windowOpener(url, name, args) {
-				/******************************* 
-				the popupWins array stores an object reference for
-				each separate window that is called, based upon
-				the name attribute that is supplied as an argument
-				*******************************/
-				if ( typeof( popupWins[name] ) != "object" ){
-				popupWins[name] = window.open(url,name,args);
-				button.css("background-color", defBackground);
-				} else {
-				if (!popupWins[name].closed){
-				popupWins[name].location.href = url;
-				button.css("background-color", defBackground);
-				} else {
-				popupWins[name] = window.open(url, name,args);
-				button.css("background-color", defBackground);
-				}
-				}
-				popupWins[name].focus();
-				popupWins[name].reload();
-				
-				}
-				
+		});
+		
+		
+		$(DOWNLOAD_BUTTON_ID).click(function(){
+			
+			var file = self.currentFile;
+			
+		
+			if(file == null){
+				console.log("Cannot download blank file");
+				return;
+			}
 			
 			
+			var url = "/editor/file/download/" + file.id + "/" + file.filename;
+			var winArgs = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+			var winName = file.id;
 			
+			windowOpener(url,winName,winArgs);	
 			
 		});
 	};
@@ -488,6 +500,7 @@ var sruide = {};
 		
 		$(SAVE_BUTTON_ID).show();
 		$(PREVIEW_BUTTON_ID).show();
+		$(DOWNLOAD_BUTTON_ID).show();
 		
 		//editor.goToLine(1);
 	};
