@@ -155,20 +155,23 @@ var sruide = {};
 			          allFields.removeClass( "ui-state-error" );
 			          var file_parsed = name.val().split('/');
 	           	      file_parsed.shift(); //removes first blank element
-	           	      file_parsed = file_parsed; //set the array 
+	           	      //file_parsed = file_parsed; //set the array 
 	           	      var file_array_size = file_parsed.length; //size of array
-	           	      //var puncFlag = parseInt(file_parsed[0].lastIndexOf('.')); //if 1, period found. if -1, not found. used to test for extension in file
+	           	      var puncFlag = parseInt(file_parsed[0].lastIndexOf('.')); //if 1, period found. if -1, not found. used to test for extension in file
 	           	      var extension = file_parsed[0].substring(file_parsed[0].lastIndexOf('.'), file_parsed[0].length);
-	           	     
+	           	      
+	           	 if (puncFlag > 0)
+	           		 {
+	           		  
 	           	      if (extension != ".html" && extension != ".svg" && extension != ".js")
 			        	  {
 			        	   bValid = false;
-			        	   alert("bad ext");
+			        	   alert("Please enter a valid extension");
 			        	  }
 			          else if (checkLength ( name, "file name", 3, 200 ) == false)
 			              {
 			        	   bValid = false;
-			        	   alert("too short");
+			        	   alert("Please enter between 3 and 200 characters");
 			              }
 			          else if (name.val().charAt(0) != '/')
 			        	  {
@@ -179,13 +182,39 @@ var sruide = {};
 			        	  {
 			        	   bValid  = true;
 			        	  }
-	           	      
+	           		 }
+	           	 else //no extension present, meaning they want to create a folder first
+	           		 { 
+	           		   alert("folder");
+	           		   var folderFile = file_parsed[file_array_size-1];
+	           		   var extension2 = folderFile.substring(folderFile.lastIndexOf('.'), folderFile.length);
+	           		   if (extension2 != ".html" && extension2 != ".svg" && extension2 != ".js")
+		        	   {
+		        	     bValid = false;
+		        	     alert("Please enter a valid extension, or add at least one file to your new folder");
+		        	   }
+	           		   else if (checkLength ( name.val(), "file name", 3, 200 ) == false)
+		               {
+		        	    bValid = false;
+		        	    alert("Please enter between 3 and 200 characters.");
+		               }
+		               else if (name.val().charAt(0) != '/') //must start with '/' 
+		        	   {
+		        	    bValid = false;
+		        	    alert("Please use '/' format")
+		        	    
+		        	   }
+		               else
+		        	   {
+		        	    bValid  = true;
+		        	   }
+	           		 }
 			          if (bValid) 
 			          {  	   
 			            // CREATE THE NEW FILE...
 			        	  var file = {
 			        			  		                     
-			        			filename:file_parsed[0],
+			        			filename:file_parsed[file_array_size-1], //so even when we enter a path with a folder, it takes the file name.
 			        			file_type:$( "input:radio[name=radio]:checked" ).val(),
 			        			file_path:name.val(),
 			        			content:""
@@ -220,17 +249,17 @@ var sruide = {};
 			        	  
 			        	  console.log("Create new file.");
 			            $( this ).dialog( "close" );
-			          }
+			          } //if bvalid
 			          else
 			        	  {
 			        	   
 			        	  }
 			     
-			        },
+			        }, // create file function
 			        Cancel: function() {
 			          $( this ).dialog( "close" );
 			        }
-			      },
+			      }, //buttons
 			      close: function() {
 			        allFields.val( "" ).removeClass( "ui-state-error" );
 			      }
