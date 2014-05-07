@@ -29,17 +29,17 @@
 			<header class="wrapper clearfix">
 				<img id="header_logo" src="{% static "img/logo.png" %}" alt="SRU" />
 				<h1 class="title">Web IDE</h1>
-				<div id="greeting">Welcome, {{ user_full_name }}</div>
-				<nav>
-					<ul class="navigation">
-						<li><a href="/">Home</a></li>
-						{% if not user.is_authenticated %}
-							<li><a href="/login">Login</a></li>
-						{% else %}
-							<li><a href="/logout">Logout</a></li>
-						{% endif %}
-					</ul>
-				</nav>
+				<ul class="navigation">
+					<li><a href="/">Home</a></li>
+					{% if not user.is_authenticated %}
+						<li><a href="/login">Login</a></li>
+					{% else %}
+						<li><a href="/logout">Logout</a></li>
+					{% endif %}
+				</ul>
+				{% if user.is_authenticated %}
+					<div id="greeting">Welcome, {{ user_full_name }}</div>
+				{% endif %}
 			</header>
 		</div>
 	</div>

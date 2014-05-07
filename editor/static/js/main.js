@@ -351,14 +351,11 @@ var sruide = {};
 			*******************************/
 			if ( typeof( popupWins[name] ) != "object" ){
 			popupWins[name] = window.open(url,name,args);
-			button.css("background-color", defBackground);
 			} else {
 			if (!popupWins[name].closed){
 			popupWins[name].location.href = url;
-			button.css("background-color", defBackground);
 			} else {
 			popupWins[name] = window.open(url, name,args);
-			button.css("background-color", defBackground);
 			}
 			}
 			popupWins[name].focus();

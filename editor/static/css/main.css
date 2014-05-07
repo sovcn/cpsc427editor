@@ -132,11 +132,11 @@ div.header-container h1.title{
 
 div.header-container ul.navigation{
 	display: block;
-	width: 300px;
 	float: right;
 	text-align: right;
-	margin-top: 0px;
-	margin-right: 6px;
+	margin-top: 10px;
+	margin-right: 10px;
+	padding: 0;
 }
 
 div.header-container ul.navigation li{
@@ -201,7 +201,7 @@ div#greeting{
 		text-align: right;
 		margin-top: 0px;
 		width: 300px;
-		margin-left: 740px;
+		float: right;
 		font-family: wf_segoe-ui_light,'Segoe UI Light','Segoe WP Light',wf_segoe-ui_normal,'Segoe UI',Segoe,'Segoe WP',Tahoma,Verdana,Arial,sans-serif;
 		font-style: italic;
 		margin-right: 3px;
