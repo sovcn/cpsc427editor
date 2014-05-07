@@ -187,7 +187,6 @@ var sruide = {};
 	           		 }
 	           	 else //no extension present, meaning they want to create a folder first
 	           		 { 
-	           		   alert("folder");
 	           		   var folderFile = file_parsed[file_array_size-1];
 	           		   var extension2 = folderFile.substring(folderFile.lastIndexOf('.'), folderFile.length);
 	           		   if (extension2 != ".html" && extension2 != ".svg" && extension2 != ".js")
@@ -195,16 +194,10 @@ var sruide = {};
 		        	     bValid = false;
 		        	     alert("Please enter a valid extension, or add at least one file to your new folder");
 		        	   }
-	           		   else if (checkLength ( name.val(), "file name", 3, 200 ) == false)
-		               {
-		        	    bValid = false;
-		        	    alert("Please enter between 3 and 200 characters.");
-		               }
 		               else if (name.val().charAt(0) != '/') //must start with '/' 
 		        	   {
 		        	    bValid = false;
 		        	    alert("Please use '/' format")
-		        	    
 		        	   }
 		               else
 		        	   {
