@@ -216,18 +216,8 @@ var sruide = {};
 			        			file_path:name.val(),
 			        			content:""
 			        	  };
-			        	  // add the right file information from the path...
-			        	  // You might need to put in empty/fake data to get it to create the file.
-			        	  /*
-			        	   *    filename = models.CharField(max_length=50) // required
-							    file_type = models.CharField(max_length=4, choices=FILE_CHOICES, default=HTML) // they need to be able to choose this
-							    file_path = models.CharField(max_length=255) // from the file path they enter		    
-					
-							    created_by = models.ForeignKey(User) // Let me get back to you on this...
-							    content = models.TextField() // to to blank: ""
-			        	   */
 			        	  
-			        	  // At this point, file should be an {} (object) containing 
+			        	  // At this point, file should be an {} (object) containing all necessary values
 			        	  $.post("/ajax/editor/file/create_file.json",
 			  					file,
 			  					function(data){
@@ -246,11 +236,7 @@ var sruide = {};
 			        	  
 			        	  console.log("Create new file.");
 			            $( this ).dialog( "close" );
-			          } //if bvalid
-			          else
-			        	  {
-			        	   
-			        	  }
+			          } //if bvalid  
 			     
 			        }, // create file function
 			        Cancel: function() {
