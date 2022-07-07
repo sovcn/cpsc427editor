@@ -22,7 +22,7 @@ pycurl==7.19.3
 pyserial==2.6
 python-apt==0.9.1ubuntu1
 python-debian==0.1.21-nmu2ubuntu1
-requests==2.0.0
+requests==2.20.0
 six==1.5.2
 ssh-import-id==3.19
 stevedore==0.14.1
